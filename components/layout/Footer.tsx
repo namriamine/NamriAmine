@@ -37,7 +37,7 @@ export function Footer() {
               </Link>
             ))}
           </div>
-          <p className="text-xs text-slate-400">© 2026 {personalInfo.name}. All rights reserved.</p>
+          <p className="text-xs text-slate-500">© 2026 {personalInfo.name}. All rights reserved.</p>
         </div>
       </div>
     </footer>

@@ -67,6 +67,7 @@ function ProjectActions({ project }: { project: Project }) {
       )}
       <Link
         href={walkthroughHref}
+        aria-label={`Request a walkthrough of ${project.title}`}
         className="group inline-flex items-center gap-1.5 text-sm font-semibold text-slate-600 transition-colors hover:text-teal-700 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-teal-600"
       >
         Request walkthrough

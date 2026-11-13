@@ -165,7 +165,7 @@ export function Skills() {
                     >
                       <TechIcon name={skill.name} className="h-4 w-4 text-teal-600" />
                       <span>{skill.name}</span>
-                      <span className="font-mono text-[11px] text-slate-400">{skill.years}</span>
+                      <span className="font-mono text-[11px] text-slate-500">{skill.years}</span>
                     </li>
                   ))}
                 </ul>
