@@ -1,11 +1,18 @@
 import dynamic from 'next/dynamic'
-import Script from 'next/script'
 import { Footer } from '@/components/layout/Footer'
 import { Navigation } from '@/components/layout/Navigation'
 import { ScrollProgress } from '@/components/layout/ScrollProgress'
 import { ScrollToTop } from '@/components/layout/ScrollToTop'
 import { About } from '@/components/sections/About'
 import { Hero } from '@/components/sections/Hero'
+import { personalInfo } from '@/data/personal'
+
+const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'https://namri-amine.vercel.app').replace(
+  /\/$/,
+  '',
+)
+
+const jsonLd = (data: Record<string, unknown>) => JSON.stringify(data).replace(/</g, '\\u003c')
 
 function SectionFallback({ id, tone = 'tint' }: { id: string; tone?: 'plain' | 'tint' }) {
   const sectionTone = tone === 'plain' ? 'bg-white' : 'bg-[#f4f8fc]'
@@ -46,42 +53,55 @@ export default function HomePage() {
       <Navigation />
       <ScrollProgress />
       <main id="main-content" tabIndex={-1} className="w-full max-w-full overflow-x-hidden">
-        <Script id="ld-json-person" type="application/ld+json">
-          {JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'Person',
-            name: 'Namri Amine',
-            url: process.env.NEXT_PUBLIC_SITE_URL || 'https://namri-amine.vercel.app',
-            jobTitle: 'Senior JavaScript Full-Stack Developer',
-            sameAs: ['https://linkedin.com/in/namriamine', 'https://github.com/namriamine'],
-            address: {
-              '@type': 'PostalAddress',
-              addressLocality: 'Casablanca',
-              addressCountry: 'MA',
-            },
-            knowsAbout: [
-              'React',
-              'Next.js',
-              'TypeScript',
-              'Node.js',
-              'TailwindCSS',
-              'Python',
-              'FastAPI',
-              'AI Pipelines',
-              'GenAI Integration',
-              'API Design',
-              'SaaS Platforms',
-            ],
-          })}
-        </Script>
-        <Script id="ld-json-website" type="application/ld+json">
-          {JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'WebSite',
-            name: 'Namri Amine Portfolio',
-            url: process.env.NEXT_PUBLIC_SITE_URL || 'https://namri-amine.vercel.app',
-          })}
-        </Script>
+        <script
+          id="ld-json-person"
+          type="application/ld+json"
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD is generated from local typed data and escapes HTML characters.
+          dangerouslySetInnerHTML={{
+            __html: jsonLd({
+              '@context': 'https://schema.org',
+              '@type': 'Person',
+              name: personalInfo.name,
+              url: siteUrl,
+              jobTitle: personalInfo.title,
+              description: personalInfo.seo.description,
+              image: `${siteUrl}/profile.webp`,
+              sameAs: [personalInfo.linkedin, 'https://github.com/NAMRIAMINE'],
+              address: {
+                '@type': 'PostalAddress',
+                addressLocality: 'Casablanca',
+                addressCountry: 'MA',
+              },
+              knowsAbout: [
+                'React',
+                'Next.js',
+                'TypeScript',
+                'Node.js',
+                'TailwindCSS',
+                'Python',
+                'FastAPI',
+                'LLM and model API integration',
+                'API Design',
+                'SaaS Platforms',
+              ],
+            }),
+          }}
+        />
+        <script
+          id="ld-json-website"
+          type="application/ld+json"
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD is generated from local typed data and escapes HTML characters.
+          dangerouslySetInnerHTML={{
+            __html: jsonLd({
+              '@context': 'https://schema.org',
+              '@type': 'WebSite',
+              name: 'Namri Amine Portfolio',
+              url: siteUrl,
+              description: personalInfo.seo.description,
+              inLanguage: 'en',
+            }),
+          }}
+        />
         <Hero />
         <Projects />
         <About />

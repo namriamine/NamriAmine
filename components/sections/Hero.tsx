@@ -3,7 +3,6 @@
 import { DownloadSimple } from '@phosphor-icons/react'
 import { motion, useReducedMotion } from 'motion/react'
 import Image from 'next/image'
-import Link from 'next/link'
 import type { ElementType } from 'react'
 import {
   SiFastapi,
@@ -138,7 +137,7 @@ export function Hero() {
           </div>
 
           <h1 className="font-display mt-4 max-w-[18ch] text-[clamp(2.15rem,3.75vw,3.75rem)] font-semibold leading-[1.05] tracking-[-0.024em] text-slate-950 sm:max-w-6xl">
-            {personalInfo.name} builds full-stack systems for SaaS, APIs, and AI workflows.
+            {personalInfo.name} builds product systems for SaaS, data, and AI workflows.
           </h1>
 
           <p className="mt-5 max-w-xl text-base leading-7 text-slate-600 md:mt-6">
@@ -164,16 +163,15 @@ export function Hero() {
               Contact
             </Button>
 
-            <Link
-              href="/Namri_Amine_English.pdf"
+            <a
+              href={personalInfo.resume.href}
               download
-              target="_blank"
-              rel="noopener noreferrer"
+              type="application/pdf"
               className="inline-flex h-11 items-center gap-2 rounded-full px-2 text-sm font-medium text-slate-600 transition-colors duration-300 hover:text-slate-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600"
             >
               <DownloadSimple className="h-4 w-4" weight="bold" />
-              Download Resume
-            </Link>
+              {personalInfo.resume.label}
+            </a>
           </div>
 
           <div className="mt-8 max-w-xl border-t border-slate-200/80 pt-5 text-sm leading-7 text-slate-500">

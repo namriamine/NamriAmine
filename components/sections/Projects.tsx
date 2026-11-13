@@ -36,7 +36,10 @@ function ProjectActions({ project }: { project: Project }) {
   )}`
 
   return (
-    <div className="flex flex-wrap items-center gap-x-5 gap-y-3">
+    <nav
+      aria-label={`Project links for ${project.title}`}
+      className="flex flex-wrap items-center gap-x-5 gap-y-3"
+    >
       {project.liveUrl && (
         <Link
           href={project.liveUrl}
@@ -72,7 +75,7 @@ function ProjectActions({ project }: { project: Project }) {
           weight="bold"
         />
       </Link>
-    </div>
+    </nav>
   )
 }
 
@@ -81,7 +84,8 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
     <article
       data-project-presentation={project.presentation}
       data-project-tier={project.presentation === 'flagship' ? 'featured' : 'supporting'}
-      className="group flex min-w-0 flex-col overflow-hidden rounded-[1.5rem] border border-slate-200 bg-white shadow-[0_8px_30px_-20px_rgba(15,23,42,0.28)] transition-[border-color,box-shadow,transform] duration-300 hover:-translate-y-1 hover:border-slate-300 hover:shadow-[0_24px_50px_-28px_rgba(15,23,42,0.3)]"
+      aria-label={`${project.title} case study`}
+      className="group flex min-w-0 flex-col overflow-hidden rounded-[1.5rem] border border-slate-200 bg-white shadow-[0_8px_30px_-20px_rgba(15,23,42,0.28)] transition-[border-color,box-shadow] duration-300 hover:border-slate-300 hover:shadow-[0_24px_50px_-28px_rgba(15,23,42,0.3)]"
     >
       <div
         data-project-image
@@ -90,7 +94,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
         {project.image && (
           <Image
             src={project.image}
-            alt={`${project.title} product interface`}
+            alt={project.imageAlt ?? `${project.title} product interface`}
             fill
             priority={index === 0}
             sizes="(max-width: 1024px) 100vw, 44vw"
@@ -116,9 +120,12 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
         <p className="mt-3 text-[0.95rem] leading-7 text-slate-600">{project.description}</p>
 
         {project.role && (
-          <p className="mt-5 border-l-2 border-teal-500 pl-3 text-sm font-medium leading-6 text-slate-800">
-            {project.role}
-          </p>
+          <div className="mt-5 border-l-2 border-teal-500 pl-3">
+            <p className="text-[0.7rem] font-semibold uppercase tracking-[0.12em] text-slate-500">
+              Role
+            </p>
+            <p className="mt-1 text-sm font-medium leading-6 text-slate-800">{project.role}</p>
+          </div>
         )}
 
         <div className="mt-6 border-t border-slate-100 pt-5">
@@ -128,7 +135,11 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           <ul className="mt-3 grid gap-2 text-sm leading-6 text-slate-700">
             {project.features.slice(0, FEATURE_LIMIT).map((feature) => (
               <li key={feature} className="flex gap-2.5">
-                <span className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-teal-500" />
+                <CheckCircle
+                  className="mt-1 h-4 w-4 shrink-0 text-teal-700"
+                  weight="fill"
+                  aria-hidden="true"
+                />
                 {feature}
               </li>
             ))}
@@ -136,31 +147,39 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
         </div>
 
         {project.outcome && (
-          <div className="mt-6 rounded-xl border border-teal-100 bg-[#f1f8f6] px-4 py-3.5">
+          <div
+            data-project-outcome
+            className="mt-6 border-l-2 border-teal-600 bg-[#f1f8f6] px-4 py-3.5"
+          >
             <p className="text-[0.7rem] font-semibold uppercase tracking-[0.12em] text-teal-800">
-              Outcome
+              Evidence of impact
             </p>
             <p className="mt-1.5 text-sm leading-6 text-slate-700">{project.outcome}</p>
           </div>
         )}
 
-        <ul className="mt-6 flex flex-wrap gap-1.5" aria-label={`${project.title} technologies`}>
-          {project.tech.slice(0, TECH_LIMIT).map((tech) => (
-            <li
-              key={tech}
-              className="rounded-md border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-medium text-slate-700"
-            >
-              {tech}
-            </li>
-          ))}
-          {project.tech.length > TECH_LIMIT && (
-            <li className="px-1 py-1 text-xs font-medium text-slate-500">
-              +{project.tech.length - TECH_LIMIT} more
-            </li>
-          )}
-        </ul>
+        <div className="mt-6">
+          <p className="text-[0.7rem] font-semibold uppercase tracking-[0.12em] text-slate-500">
+            Core stack
+          </p>
+          <ul className="mt-3 flex flex-wrap gap-1.5" aria-label={`${project.title} technologies`}>
+            {project.tech.slice(0, TECH_LIMIT).map((tech) => (
+              <li
+                key={tech}
+                className="rounded-md border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-medium text-slate-700"
+              >
+                {tech}
+              </li>
+            ))}
+            {project.tech.length > TECH_LIMIT && (
+              <li className="px-1 py-1 text-xs font-medium text-slate-500">
+                +{project.tech.length - TECH_LIMIT} more
+              </li>
+            )}
+          </ul>
+        </div>
 
-        <div className="mt-auto border-t border-slate-100 pt-6">
+        <div className="mt-7 -mb-6 -mx-6 border-t border-slate-200 bg-slate-50 px-6 py-5 sm:-mb-8 sm:-mx-8 sm:px-8">
           <ProjectActions project={project} />
         </div>
       </div>
@@ -195,7 +214,6 @@ export function Projects() {
             Featured projects
           </h3>
           <span className="h-px flex-1 bg-slate-200" aria-hidden="true" />
-          <span className="text-xs font-medium text-slate-500">01 / 02</span>
         </div>
         <div data-featured-projects className="grid gap-6 lg:grid-cols-2 lg:gap-7">
           {featuredProjects.map((project, index) => (
@@ -210,7 +228,6 @@ export function Projects() {
                 Additional systems
               </h3>
               <span className="h-px flex-1 bg-slate-200" aria-hidden="true" />
-              <span className="text-xs font-medium text-slate-500">03 / 04</span>
             </div>
             <div data-supporting-projects className="grid gap-6 lg:grid-cols-2 lg:gap-7">
               {supportingProjects.map((project, index) => (

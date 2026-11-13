@@ -11,27 +11,36 @@ async function noHorizontalOverflow(page: import('@playwright/test').Page) {
   expect(overflow, 'horizontal overflow detected').toBe(false)
 }
 
+async function waitForSection(page: import('@playwright/test').Page, id: string) {
+  const section = page.locator(`#${id}`)
+  await expect(section).toBeAttached()
+  await section.scrollIntoViewIfNeeded()
+  return section
+}
+
 // ─── Basic load ─────────────────────────────────────────────────────────────
 
 test('homepage loads with correct title', async ({ page }) => {
   await page.goto('/')
   await expect(page).toHaveTitle(/Namri Amine/)
-  await expect(page).toHaveTitle(/Senior JavaScript Full-Stack Developer/)
+  await expect(page).toHaveTitle(/Full-Stack Developer in Morocco/)
 })
 
 test('metadata and structured data use the canonical professional title', async ({ page }) => {
   await page.goto('/')
   await expect(page.locator('meta[property="og:title"]')).toHaveAttribute(
     'content',
-    'Namri Amine - Senior JavaScript Full-Stack Developer',
+    'Namri Amine | Full-Stack Developer in Morocco — React, Next.js & Node.js',
   )
   await expect(page.locator('meta[name="twitter:title"]')).toHaveAttribute(
     'content',
-    'Namri Amine - Senior JavaScript Full-Stack Developer',
+    'Namri Amine | Full-Stack Developer in Morocco — React, Next.js & Node.js',
   )
 
   const personJson = await page.locator('script#ld-json-person').textContent()
-  expect(JSON.parse(personJson ?? '{}').jobTitle).toBe('Senior JavaScript Full-Stack Developer')
+  expect(JSON.parse(personJson ?? '{}').jobTitle).toBe(
+    'Senior Full-Stack Developer with a Frontend Focus',
+  )
 })
 
 // ─── No horizontal overflow at all target widths ────────────────────────────
@@ -47,12 +56,12 @@ for (const width of WIDTHS) {
 
 // ─── Hero content ───────────────────────────────────────────────────────────
 
-test('hero contains the new positioning headline', async ({ page }) => {
+test('hero contains the balanced full-stack positioning headline', async ({ page }) => {
   await page.goto('/')
   await expect(page.getByRole('heading', { level: 1 })).toContainText('Namri Amine')
-  await expect(page.getByRole('heading', { level: 1 })).toContainText('full-stack systems')
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('product systems')
   await expect(page.getByRole('heading', { level: 1 })).toContainText(
-    'SaaS, APIs, and AI workflows',
+    'SaaS, data, and AI workflows',
   )
 })
 
@@ -82,6 +91,20 @@ test('content keeps minimum responsive page gutters', async ({ page }) => {
     expect(heading).not.toBeNull()
     expect(heading?.x ?? 0).toBeGreaterThanOrEqual(viewport.minimumGutter)
   }
+})
+
+test('navbar aligns with the project grid at desktop', async ({ page }) => {
+  await page.setViewportSize({ width: 1600, height: 900 })
+  await page.goto('/')
+  await waitForSection(page, 'projects')
+
+  const navbar = await page.locator('nav[aria-label="Primary"] > div').boundingBox()
+  const firstProject = await page.locator('#projects article').first().boundingBox()
+
+  expect(navbar).not.toBeNull()
+  expect(firstProject).not.toBeNull()
+  expect(navbar?.width).toBe(1312)
+  expect(navbar?.x).toBeCloseTo(firstProject?.x ?? 0, 0)
 })
 
 test('hero primary actions are visible at mobile and desktop widths', async ({ page }) => {
@@ -125,10 +148,13 @@ test('primary CTA scrolls to projects section', async ({ page }) => {
 test('resume link points to correct PDF', async ({ page }) => {
   await page.goto('/')
   const resumeLink = page.locator('#home').getByRole('link', { name: /Download Resume/i })
-  await expect(resumeLink).toHaveAttribute('href', '/Namri_Amine_English.pdf')
-  await expect(
-    page.locator('#contact').getByRole('link', { name: 'CV en français' }),
-  ).toHaveAttribute('href', '/Namri_Amine_CV_FR.pdf')
+  await expect(resumeLink).toHaveAttribute('href', '/Full-Stack_Namri_Amine.pdf')
+  await expect(resumeLink).toHaveAttribute('download', '')
+  const contact = await waitForSection(page, 'contact')
+  await expect(contact.getByRole('link', { name: /Download Resume/i })).toHaveAttribute(
+    'href',
+    '/Full-Stack_Namri_Amine.pdf',
+  )
 })
 
 test('hero and about use bounded Talio contract wording', async ({ page }) => {
@@ -158,13 +184,31 @@ test('second project is Creaboost', async ({ page }) => {
 
 test('flagship projects expose proof actions', async ({ page }) => {
   await page.goto('/')
+  await waitForSection(page, 'projects')
   const flagshipProject = page.locator('[data-project-presentation="flagship"]').first()
+  await flagshipProject.scrollIntoViewIfNeeded()
   await expect(flagshipProject.locator('a').first()).toBeVisible()
+})
+
+test('project case studies group contributions, evidence, stack, and links', async ({ page }) => {
+  await page.goto('/')
+  await waitForSection(page, 'projects')
+  const indus = page.locator('[data-project-presentation="flagship"]').first()
+  await indus.scrollIntoViewIfNeeded()
+
+  await expect(indus).toContainText('Selected contributions')
+  await expect(indus).toContainText('Evidence of impact')
+  await expect(indus).toContainText('Core stack')
+  await expect(
+    indus.getByRole('navigation', { name: 'Project links for Indus Inspection' }),
+  ).toBeVisible()
 })
 
 test('Dr Turbine is rendered as a secondary project case study', async ({ page }) => {
   await page.goto('/')
+  await waitForSection(page, 'projects')
   const secondaryProject = page.locator('[data-project-presentation="secondary"]')
+  await secondaryProject.scrollIntoViewIfNeeded()
   await expect(secondaryProject).toContainText('Dr Turbine')
   await expect(secondaryProject.locator('img')).toBeVisible()
   await expect(
@@ -174,7 +218,9 @@ test('Dr Turbine is rendered as a secondary project case study', async ({ page }
 
 test('Filahi is rendered as an archive project', async ({ page }) => {
   await page.goto('/')
+  await waitForSection(page, 'projects')
   const archiveProject = page.locator('[data-project-presentation="archive"]')
+  await archiveProject.scrollIntoViewIfNeeded()
   await expect(archiveProject).toContainText('Filahi WebApp')
   await expect(archiveProject.locator('img')).toBeVisible()
 })
@@ -257,8 +303,8 @@ test('unknown route renders the branded 404 page', async ({ page }) => {
   await expect(page.getByRole('heading', { level: 1 })).toContainText('This page is not here')
 })
 
-test('resume PDF returns 200 with pdf content-type', async ({ request }) => {
-  const response = await request.get('/Namri_Amine_English.pdf')
+test('resume PDF returns 200 with a PDF content-type', async ({ request }) => {
+  const response = await request.get('/Full-Stack_Namri_Amine.pdf')
   expect(response.status()).toBe(200)
   const contentType = response.headers()['content-type'] ?? ''
   expect(contentType).toContain('pdf')

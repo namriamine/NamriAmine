@@ -1,8 +1,9 @@
 import { ImageResponse } from 'next/og'
+import { personalInfo } from '@/data/personal'
 
 export const runtime = 'edge'
 
-export const alt = 'Namri Amine - Senior JavaScript Full-Stack Developer'
+export const alt = `${personalInfo.name} - ${personalInfo.title}`
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
 
@@ -27,7 +28,7 @@ export default function OgImage() {
           left: 0,
           right: 0,
           height: '6px',
-          backgroundColor: '#0284c7',
+          backgroundColor: '#0f766e',
         }}
       />
 
@@ -40,18 +41,18 @@ export default function OgImage() {
           letterSpacing: '-2px',
         }}
       >
-        Namri Amine
+        {personalInfo.name}
       </div>
 
       <div
         style={{
           fontSize: 36,
           fontWeight: 600,
-          color: '#0284c7',
+          color: '#0f766e',
           marginTop: '16px',
         }}
       >
-        Senior JavaScript Full-Stack Developer
+        {personalInfo.title}
       </div>
 
       <div
@@ -62,7 +63,7 @@ export default function OgImage() {
           fontWeight: 400,
         }}
       >
-        SaaS Platforms | APIs | Next.js | Node.js | FastAPI | AI Workflows
+        {personalInfo.subtitle}
       </div>
 
       <div

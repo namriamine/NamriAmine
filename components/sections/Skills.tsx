@@ -26,11 +26,8 @@ import {
   SiMysql,
   SiNextdotjs,
   SiNodedotjs,
-  SiOnnx,
-  SiOpencv,
   SiPostgresql,
   SiPrisma,
-  SiPytest,
   SiPython,
   SiReact,
   SiRedis,
@@ -40,7 +37,6 @@ import {
   SiTypescript,
   SiVercel,
   SiVitest,
-  SiYolo,
 } from 'react-icons/si'
 import { skillCategories } from '@/data/skills'
 
@@ -48,7 +44,7 @@ const CATEGORY_SUMMARIES: Record<string, string> = {
   coreWeb: 'Interfaces, state, component systems, and responsive product delivery.',
   backendData: 'APIs, relational data, caching, services, and integration boundaries.',
   productSystems: 'Auth, queues, realtime updates, deployment, and production infrastructure.',
-  appliedAI: 'Computer vision, model runtimes, map interfaces, and geospatial processing.',
+  appliedAI: 'LLM and model API integrations, AI-assisted development, and geospatial processing.',
   mobileDesktop: 'Mobile and desktop surfaces when the product extends beyond the browser.',
   testingDelivery: 'Automated validation and release practices that keep product work shippable.',
 }
@@ -78,9 +74,6 @@ const TECH_ICONS: Record<string, ElementType<{ className?: string; 'aria-hidden'
   Docker: SiDocker,
   Vercel: SiVercel,
   'GitHub Actions': SiGithubactions,
-  YOLOv8: SiYolo,
-  'ONNX Runtime': SiOnnx,
-  OpenCV: SiOpencv,
   'Google Gemini SDK': SiGooglegemini,
   'AI Pipelines': Robot,
   MapLibreGL: SiMaplibre,
@@ -89,7 +82,6 @@ const TECH_ICONS: Record<string, ElementType<{ className?: string; 'aria-hidden'
   Expo: SiExpo,
   Electron: SiElectron,
   Vitest: SiVitest,
-  pytest: SiPytest,
   Playwright: Code,
   'Git/GitHub': SiGithub,
   'Bunny CDN': SiBunnydotnet,

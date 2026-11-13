@@ -3,8 +3,7 @@ import Link from 'next/link'
 import { personalInfo } from '@/data/personal'
 
 const SECONDARY_LINKS = [
-  { label: 'Download Resume', href: '/Namri_Amine_English.pdf', download: true },
-  { label: 'CV en français', href: '/Namri_Amine_CV_FR.pdf', download: true },
+  { label: personalInfo.resume.label, href: personalInfo.resume.href, download: true },
   { label: 'LinkedIn', href: personalInfo.linkedin, external: true },
   { label: 'GitHub', href: 'https://github.com/namriamine', external: true },
   { label: personalInfo.phone, href: `tel:${personalInfo.phone}` },
@@ -53,27 +52,44 @@ export function Contact() {
           </div>
 
           <div className="relative mt-12 flex flex-wrap items-center gap-x-6 gap-y-4 border-t border-white/20 pt-6 lg:mt-14">
-            {SECONDARY_LINKS.map((item) => (
-              <Link
-                key={item.label}
-                href={item.href}
-                download={'download' in item ? true : undefined}
-                target={'external' in item || 'download' in item ? '_blank' : undefined}
-                rel={'external' in item || 'download' in item ? 'noopener noreferrer' : undefined}
-                className="group inline-flex items-center gap-1.5 text-sm font-medium text-slate-300 transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-teal-300"
-              >
-                {item.label === 'LinkedIn' && <LinkedinLogo className="h-4 w-4" weight="duotone" />}
-                {item.label === 'GitHub' && <GithubLogo className="h-4 w-4" weight="duotone" />}
-                {item.label === personalInfo.phone && (
-                  <Phone className="h-4 w-4" weight="duotone" />
-                )}
-                {item.label}
-                <ArrowUpRight
-                  className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                  weight="bold"
-                />
-              </Link>
-            ))}
+            {SECONDARY_LINKS.map((item) =>
+              'download' in item ? (
+                <a
+                  key={item.label}
+                  href={item.href}
+                  download
+                  type="application/pdf"
+                  className="group inline-flex items-center gap-1.5 text-sm font-medium text-slate-300 transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-teal-300"
+                >
+                  {item.label}
+                  <ArrowUpRight
+                    className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                    weight="bold"
+                  />
+                </a>
+              ) : (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  target={'external' in item ? '_blank' : undefined}
+                  rel={'external' in item ? 'noopener noreferrer' : undefined}
+                  className="group inline-flex items-center gap-1.5 text-sm font-medium text-slate-300 transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-teal-300"
+                >
+                  {item.label === 'LinkedIn' && (
+                    <LinkedinLogo className="h-4 w-4" weight="duotone" />
+                  )}
+                  {item.label === 'GitHub' && <GithubLogo className="h-4 w-4" weight="duotone" />}
+                  {item.label === personalInfo.phone && (
+                    <Phone className="h-4 w-4" weight="duotone" />
+                  )}
+                  {item.label}
+                  <ArrowUpRight
+                    className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                    weight="bold"
+                  />
+                </Link>
+              ),
+            )}
           </div>
         </div>
       </div>

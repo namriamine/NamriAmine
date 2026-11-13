@@ -4,6 +4,7 @@ import '@/app/globals.css'
 import { Analytics } from '@vercel/analytics/next'
 import Link from 'next/link'
 import { ThemeProvider } from '@/components/theme/theme-provider'
+import { personalInfo } from '@/data/personal'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -16,20 +17,21 @@ const geistMono = Geist_Mono({
 })
 
 const shouldRenderAnalytics = process.env.VERCEL === '1'
+const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'https://namri-amine.vercel.app').replace(
+  /\/$/,
+  '',
+)
 
 export const viewport: Viewport = {
   themeColor: '#ffffff',
 }
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://namri-amine.vercel.app'),
-  title:
-    'Namri Amine - Senior JavaScript Full-Stack Developer | Next.js, React, TypeScript, Node.js, FastAPI',
-  description:
-    'Senior JavaScript Full-Stack Developer with 5+ years building production SaaS platforms, APIs, data workflows, and AI-enabled product systems. Next.js, React, TypeScript, Node.js, FastAPI, PostgreSQL, Redis. Based in Casablanca, Morocco.',
-  keywords:
-    'Senior Full Stack Developer, JavaScript Developer, Next.js, React, TypeScript, Node.js, FastAPI, SaaS Platforms, REST APIs, AI Workflows, GenAI Integration, Casablanca, Morocco, Remote Developer',
-  authors: [{ name: 'Namri Amine', url: 'https://linkedin.com/in/namriamine' }],
+  metadataBase: new URL(siteUrl),
+  title: personalInfo.seo.title,
+  description: personalInfo.seo.description,
+  keywords: personalInfo.seo.keywords,
+  authors: [{ name: personalInfo.name, url: personalInfo.linkedin }],
   alternates: {
     canonical: '/',
   },
@@ -39,21 +41,19 @@ export const metadata: Metadata = {
     apple: '/apple-touch-icon.png',
   },
   openGraph: {
-    title: 'Namri Amine - Senior JavaScript Full-Stack Developer',
-    description:
-      'Building production SaaS platforms, APIs, data workflows, and AI-enabled product systems with Next.js, React, TypeScript, Node.js, and FastAPI.',
+    title: personalInfo.seo.title,
+    description: personalInfo.seo.socialDescription,
     url: '/',
     siteName: 'Namri Amine Portfolio',
-    images: ['/opengraph-image'],
+    images: [{ url: `${siteUrl}/opengraph-image`, alt: personalInfo.seo.title }],
     type: 'website',
     locale: 'en_US',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Namri Amine - Senior JavaScript Full-Stack Developer',
-    description:
-      'Building production SaaS platforms, APIs, data workflows, and AI-enabled product systems with Next.js, React, TypeScript, Node.js, and FastAPI.',
-    images: ['/opengraph-image'],
+    title: personalInfo.seo.title,
+    description: personalInfo.seo.socialDescription,
+    images: [`${siteUrl}/opengraph-image`],
   },
   robots: {
     index: true,

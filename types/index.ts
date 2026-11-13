@@ -15,6 +15,7 @@ export interface Project {
   liveUrl?: string
   githubUrl?: string
   image?: string
+  imageAlt?: string
   role?: string
   scope?: string[]
   outcome?: string

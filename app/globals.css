@@ -152,8 +152,13 @@
   .page-shell {
     margin-inline: auto;
     width: 100%;
-    max-width: 92rem;
+    max-width: 90rem;
     padding-inline: clamp(1.25rem, 4.5vw, 4rem);
+  }
+
+  .navigation-shell {
+    width: 100%;
+    max-width: 82rem;
   }
 
   .section-space {

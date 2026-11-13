@@ -39,13 +39,14 @@ export function About() {
 
           <div className="lg:col-span-7 lg:pt-9">
             <p className="font-display max-w-[41ch] text-[clamp(1.25rem,1.9vw,1.7rem)] font-medium leading-[1.4] tracking-[-0.02em] text-slate-800">
-              My work grew from an image-analysis prototype embedded in DR STONE&apos;s marketing
-              site into production agriculture, inspection, and AI media platforms.
+              My work started with Wix custom-code pages and hands-on IT support at DR STONE, then
+              grew into production agriculture, inspection, and AI media platforms.
             </p>
             <p className="mt-5 max-w-[65ch] text-base leading-7 text-slate-600">
-              With {personalInfo.experience.years} years of experience, I&apos;ve worked across
-              React and Next.js interfaces, services, data, and deployment. I like owning the
-              connections between them as much as the screens people see.
+              I work as a full-stack developer with a frontend focus, across React and Next.js
+              interfaces, services, data, and deployment. Earlier freelance web work and systems
+              support gave me a practical foundation in independent delivery, Windows maintenance,
+              and local-network troubleshooting.
             </p>
             <p className="mt-6 text-sm font-medium text-slate-600">
               {personalInfo.experience.company} contract: {personalInfo.experience.period}
