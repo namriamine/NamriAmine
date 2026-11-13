@@ -1,8 +1,6 @@
 import { ImageResponse } from 'next/og'
 import { personalInfo } from '@/data/personal'
 
-export const runtime = 'edge'
-
 export const alt = `${personalInfo.name} - ${personalInfo.title}`
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
